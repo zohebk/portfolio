@@ -109,44 +109,59 @@ const dataportfolio = [
         berths: [
             {
                 name: "Berth 1", 
-                capacity: "500 TEUs", 
-                status: "Operational", 
-                lotsavail: "5",
                 Ships_affected: [
                     { nameShip: "Aye aye" },
                     { nameShip: "Meow" },
                     { nameShip: "mermaid" }
                 ],
                 ogTime: [
-                    { time: "14:00" },
-                    { time: "13:00" },
-                    { time: "16:00" }
+                    { timestamp: "October 15, 2024 at 4:28:18 PM" },
+                    { timestamp: "October 15, 2024 at 4:28:18 PM" },
+                    { timestamp: "October 15, 2024 at 4:28:18 PM" }
                 ],
                 newTime: [
-                    { time: "16:00" },
-                    { time: "18:00" },
-                    { time: "22:00" }
+                    { timestamp: "October 30, 2024 at 6:26:59 PM" },
+                    { timestamp: "October 30, 2024 at 6:26:59 PM" },
+                    { timestamp: "October 30, 2024 at 6:26:59 PM" }
                 ],
+                preBerth: [
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"}
+                ],
+                postBerth: [
+                    {destination: "berth 2"},
+                    {destination: "berth 1"},
+                    {destination: "berth 2"}
+                ]
             },
             {
                 name: "Berth 2", 
-                capacity: "300 TEUs", 
-                status: "Congested", 
-                lotsavail: "0",
+                
                 Ships_affected: [
                     { nameShip: "Aye aye" },
                     { nameShip: "Meow" },
                     { nameShip: "mermaid" }
                 ],
                 ogTime: [
-                    { time: "14:00" },
-                    { time: "13:00" },
-                    { time: "16:00" }
+                    { timestamp: "14:00" },
+                    { timestamp: "13:00" },
+                    { timestamp: "16:00" }
                 ],
                 newTime: [
-                    { time: "16:00" },
-                    { time: "18:00" },
-                    { time: "22:00" }
+                    { timestamp: "16:00" },
+                    { timestamp: "18:00" },
+                    { timestamp: "22:00" }
+                ],
+                preBerth: [
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"}
+                ],
+                postBerth: [
+                    {destination: "berth 2"},
+                    {destination: "berth 1"},
+                    {destination: "berth 2"}
                 ]
             }
         ]
@@ -155,46 +170,62 @@ const dataportfolio = [
         portName: "Port of Tanjung Pelepas",
         berths: [
             {
-                name: "Berth A", 
-                capacity: "600 TEUs", 
-                status: "Operational", 
-                lotsavail: "5", 
+                name: "Berth 2", 
+                
                 Ships_affected: [
                     { nameShip: "Aye aye" },
                     { nameShip: "Meow" },
                     { nameShip: "mermaid" }
                 ],
                 ogTime: [
-                    { time: "14:00" },
-                    { time: "13:00" },
-                    { time: "16:00" }
+                    { timestamp: "14:00" },
+                    { timestamp: "13:00" },
+                    { timestamp: "16:00" }
                 ],
                 newTime: [
-                    { time: "16:00" },
-                    { time: "18:00" },
-                    { time: "22:00" }
+                    { timestamp: "16:00" },
+                    { timestamp: "18:00" },
+                    { timestamp: "22:00" }
+                ],
+                preBerth: [
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"}
+                ],
+                postBerth: [
+                    {destination: "berth 2"},
+                    {destination: "berth 1"},
+                    {destination: "berth 2"}
                 ]
             },
             {
-                name: "Berth B", 
-                capacity: "450 TEUs", 
-                status: "Operational", 
-                lotsavail: "5",
+                name: "Berth 2", 
+                
                 Ships_affected: [
                     { nameShip: "Aye aye" },
                     { nameShip: "Meow" },
                     { nameShip: "mermaid" }
                 ],
                 ogTime: [
-                    { time: "14:00" },
-                    { time: "13:00" },
-                    { time: "16:00" }
+                    { timestamp: "14:00" },
+                    { timestamp: "13:00" },
+                    { timestamp: "16:00" }
                 ],
                 newTime: [
-                    { time: "16:00" },
-                    { time: "18:00" },
-                    { time: "22:00" }
+                    { timestamp: "16:00" },
+                    { timestamp: "18:00" },
+                    { timestamp: "22:00" }
                 ],
+                preBerth: [
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"},
+                    {arrival: "berth 1"}
+                ],
+                postBerth: [
+                    {destination: "berth 2"},
+                    {destination: "berth 1"},
+                    {destination: "berth 2"}
+                ]
             }
         ]
     }

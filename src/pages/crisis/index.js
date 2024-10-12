@@ -52,7 +52,7 @@ export const CrisisPage = () => {
             {newsArticles.length > 0 ? (
               newsArticles.map((article, index) => (
                 <div key={index} className="news-article mb-4">
-                  <h3 style={{ display: "inline-block", marginRight: "10px" }}>
+                  <h3 style={{ display: "inline-block", marginRight: 10 }}>
                     {article.title}
                   </h3>
                   {/* Button to navigate to another page */}

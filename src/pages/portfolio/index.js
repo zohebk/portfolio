@@ -68,12 +68,12 @@ export const Portfolio = () => {
             </h1>
 
             {/* Display the list of ports */}
-            <div className="port-list">
+            <div className="port-list" style={{paddingBottom:10}}>
               {dataportfolio.map((data, i) => (
                 <div
                   key={i}
                   className="port-item"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" , marginBottom: 15}}
                   onClick={() => handlePortClick(data)}
                 >
                   {/* Port Name */}
@@ -86,9 +86,6 @@ export const Portfolio = () => {
                         <thead>
                           <tr>
                             <th>Berth</th>
-                            <th>Capacity</th>
-                            <th>Status</th>
-                            <th>Lots available</th>
                             <th>Ships affected</th>
                           </tr>
                         </thead>
@@ -96,9 +93,6 @@ export const Portfolio = () => {
                           {data.berths.map((berth, index) => (
                             <tr key={index}>
                               <td>{berth.name}</td>
-                              <td>{berth.capacity}</td>
-                              <td>{berth.status}</td>
-                              <td>{berth.lotsavail}</td>
 
                               {/* Nested table inside "Ships affected" column */}
                               <td>
@@ -106,8 +100,10 @@ export const Portfolio = () => {
                                   <thead>
                                     <tr>
                                       <th>Ship Name</th>
-                                      <th>Original Arrival Time</th>
-                                      <th>New Estimated Arrival Time</th>
+                                      <th>Original Arrival TimeStamp</th>
+                                      <th>Original Berth Destination</th>
+                                      <th>New Estimated Arrival TimeStamp</th>
+                                      <th>New Berth Destination</th>
                                       <th>Generate Report</th>
                                     </tr>
                                   </thead>
@@ -118,18 +114,29 @@ export const Portfolio = () => {
 
                                         <td>
                                           {berth.ogTime[shipIndex]
-                                            ? berth.ogTime[shipIndex].time
+                                            ? berth.ogTime[shipIndex].timestamp
                                             : "-"}
                                         </td>
 
                                         <td>
                                           {berth.newTime[shipIndex]
-                                            ? berth.newTime[shipIndex].time
+                                            ? berth.newTime[shipIndex].timestamp
+                                            : "-"}
+                                        </td>
+                                        <td>
+                                          {berth.preBerth[shipIndex]
+                                            ? berth.preBerth[shipIndex].arrival
+                                            : "-"}
+                                        </td>
+                                        <td>
+                                          {berth.postBerth[shipIndex]
+                                            ? berth.postBerth[shipIndex].destination
                                             : "-"}
                                         </td>
                                         <td>
                                           <button className="generateButton"
-                                          onClick={() => handleGenerateReport(ship.nameShip)}>
+                                          onClick={() => handleGenerateReport(ship.nameShip)}
+                                          style={{marginBottom: 5}}>
                                             Generate
                                           </button>
                                         </td>
@@ -143,7 +150,7 @@ export const Portfolio = () => {
                         </tbody>
                       </table>
                       <button className="portbutton" onClick={()=> handlePortReport(data.portName)}>
-                        General port report</button>
+                        Generate port report</button>
                     </div>
                   )}
                 </div>
