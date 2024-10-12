@@ -52,19 +52,21 @@ export const CrisisPage = () => {
             {newsArticles.length > 0 ? (
               newsArticles.map((article, index) => (
                 <div key={index} className="news-article mb-4">
-                  <h3 style={{ display: "inline-block", marginRight: "10px" }}>
+                  <h3 style={{ display: "inline-block", marginRight: 10 }}>
                     {article.title}
                   </h3>
+
                   <p>{article.description}</p>
                   <a href={article.url} target="_blank" rel="noopener noreferrer">
                     Read more
                   </a>
-                  {/* Button to navigate to another page moved below the link */}
-                  <div className="mt-2"> {/* Add margin-top for spacing */}
-                    <button className='viewPortBtn' onClick={() => handleNavigate(article.title)}>
-                      View Ports Affected
-                    </button>
+
+                  <div style={{marginTop: 5}}>
+                  <button onClick={() => handleNavigate(article.title)}>
+                    View Ports Affected
+                  </button>
                   </div>
+                 
                 </div>
               ))
             ) : (
