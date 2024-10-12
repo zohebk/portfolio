@@ -1,0 +1,9 @@
+.mapCont {
+    height: 85vh;
+    width: 100vw;
+}
+.home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+}
