@@ -19,6 +19,7 @@
     transition: 0.3s ease;
     font-size: 0;
     min-height: 300px;
+    text-decoration: none; /* Ensure no underline on port items */
 }
 
 .po_item img {
@@ -77,4 +78,54 @@
 
 .po_item .content a:hover {
     text-decoration: none;
+}
+
+/* Style for the table */
+.berths-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.berths-table th,
+.berths-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    text-decoration: none; /* Explicitly remove underline from table headers and cells */
+}
+
+.berths-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.berths-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+.berths-table td {
+    text-align: center;
+    text-decoration: none !important; /* Ensure no underline in table cells */
+}
+
+/* Specifically target links within the table and remove underlines */
+.berths-table a {
+    text-decoration: none !important; /* Ensure no links inside table cells are underlined */
+}
+
+/* Styling for the port name */
+.port-name {
+    text-decoration: underline; /* Underline only for port name */
+    font-size: 1rem; /* Keep the original font size */
+    font-weight: normal; /* Keep the original font weight */
+    color: #333; /* Keep the original color */
+    margin-bottom: 8px;
+}
+
+/* Ensure the port-item div has no underline */
+.port-item {
+    text-decoration: none; /* Explicitly remove underline from the port item div */
 }

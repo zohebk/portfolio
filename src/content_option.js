@@ -72,68 +72,103 @@ const services = [{
     },
 ];
 
-const dataportfolio = [{
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
+const dataportfolio = [
+    {
+        portName: "Port of Singapore",
+        berths: [
+            {
+                name: "Berth 1", 
+                capacity: "500 TEUs", 
+                status: "Operational", 
+                lotsavail: "5",
+                Ships_affected: [
+                    { nameShip: "Aye aye" },
+                    { nameShip: "Meow" },
+                    { nameShip: "mermaid" }
+                ],
+                ogTime: [
+                    { time: "14:00" },
+                    { time: "13:00" },
+                    { time: "16:00" }
+                ],
+                newTime: [
+                    { time: "16:00" },
+                    { time: "18:00" },
+                    { time: "22:00" }
+                ]
+            },
+            {
+                name: "Berth 2", 
+                capacity: "300 TEUs", 
+                status: "Congested", 
+                lotsavail: "0",
+                Ships_affected: [
+                    { nameShip: "Aye aye" },
+                    { nameShip: "Meow" },
+                    { nameShip: "mermaid" }
+                ],
+                ogTime: [
+                    { time: "14:00" },
+                    { time: "13:00" },
+                    { time: "16:00" }
+                ],
+                newTime: [
+                    { time: "16:00" },
+                    { time: "18:00" },
+                    { time: "22:00" }
+                ]
+            }
+        ]
     },
     {
-        img: "https://picsum.photos/400/800/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/600/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/300/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/700/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-
-    {
-        img: "https://picsum.photos/400/600/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/300/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/550/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/700/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
+        portName: "Port of Tanjung Pelepas",
+        berths: [
+            {
+                name: "Berth A", 
+                capacity: "600 TEUs", 
+                status: "Operational", 
+                lotsavail: "5", 
+                Ships_affected: [
+                    { nameShip: "Aye aye" },
+                    { nameShip: "Meow" },
+                    { nameShip: "mermaid" }
+                ],
+                ogTime: [
+                    { time: "14:00" },
+                    { time: "13:00" },
+                    { time: "16:00" }
+                ],
+                newTime: [
+                    { time: "16:00" },
+                    { time: "18:00" },
+                    { time: "22:00" }
+                ]
+            },
+            {
+                name: "Berth B", 
+                capacity: "450 TEUs", 
+                status: "Operational", 
+                lotsavail: "5",
+                Ships_affected: [
+                    { nameShip: "Aye aye" },
+                    { nameShip: "Meow" },
+                    { nameShip: "mermaid" }
+                ],
+                ogTime: [
+                    { time: "14:00" },
+                    { time: "13:00" },
+                    { time: "16:00" }
+                ],
+                newTime: [
+                    { time: "16:00" },
+                    { time: "18:00" },
+                    { time: "22:00" }
+                ],
+            }
+        ]
+    }
 ];
+
 
 const contactConfig = {
     YOUR_EMAIL: "name@domain.com",
