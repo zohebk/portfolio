@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@faker-js/faker": "^9.0.3",
         "axios": "^1.7.7",
         "bootstrap": "^5.2.3",
         "emailjs-com": "^3.2.0",
