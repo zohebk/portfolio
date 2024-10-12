@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
 
 export const CrisisPage = () => {
   const [newsArticles, setNewsArticles] = useState([]);
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Fetching crisis-related news data (assuming using a news API)
+  // Fetching crisis-related news data
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -22,6 +24,11 @@ export const CrisisPage = () => {
 
     fetchNews();
   }, []);
+
+  // Handle navigation to another page with articleTitle passed as state
+  const handleNavigate = (articleTitle) => {
+    navigate("/ports-affected", { state: { articleTitle } });
+  };
 
   return (
     <HelmetProvider>
@@ -44,7 +51,13 @@ export const CrisisPage = () => {
             {newsArticles.length > 0 ? (
               newsArticles.map((article, index) => (
                 <div key={index} className="news-article mb-4">
-                  <h3>{article.title}</h3>
+                  <h3 style={{ display: "inline-block", marginRight: "10px" }}>
+                    {article.title}
+                  </h3>
+                  {/* Button to navigate to another page */}
+                  <button onClick={() => handleNavigate(article.title)}>
+                    View Ports Affected
+                  </button>
                   <p>{article.description}</p>
                   <a href={article.url} target="_blank" rel="noopener noreferrer">
                     Read more
