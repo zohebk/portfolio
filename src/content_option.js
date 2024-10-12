@@ -95,6 +95,12 @@ const dataportfolio = [
                     { time: "16:00" },
                     { time: "18:00" },
                     { time: "22:00" }
+                ],
+                Rerouted : [
+                    "Y", "N", "Y"
+                ],
+                rerouteDest: [
+                    "SCS Port", "NIL", "Port of Melayu"
                 ]
             },
             {
