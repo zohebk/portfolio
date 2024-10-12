@@ -8,6 +8,23 @@
     height: 100vh; /* Full height of the viewport */
 }
 
+.viewPortBtn {
+  padding: 10px 20px;
+  background-color: black; /* Bright blue */
+  color: white; 
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer; 
+  font-size: 15px; 
+  transition: transform 0.2s, background-color 0.3s; /* Smooth transitions */
+}
+
+.viewPortBtn:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+  transform: scale(1.05); /* Slight size increase */
+}
+
 .blinking-icon {
     background: url('../../assets/images/alert.png') no-repeat center center;
     background-size: contain;
