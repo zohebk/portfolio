@@ -209,7 +209,7 @@ export const Home = () => {
                             <h3>{alert.info.type}</h3>
                             <p>{alert.info.description}</p>
                             <p><strong>Impact Radius: </strong>{alert.info.impactRadius} km</p>
-                            <button onClick={() => handleNavigate(alert.info.articleTitle)}>View ports affected</button>
+                            <button className="viewPortBtn" onClick={() => handleNavigate(alert.info.articleTitle)}>View ports affected</button>
                         </Popup>
                         </Marker>
                     ))}

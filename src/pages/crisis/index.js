@@ -55,14 +55,16 @@ export const CrisisPage = () => {
                   <h3 style={{ display: "inline-block", marginRight: "10px" }}>
                     {article.title}
                   </h3>
-                  {/* Button to navigate to another page */}
-                  <button onClick={() => handleNavigate(article.title)}>
-                    View Ports Affected
-                  </button>
                   <p>{article.description}</p>
                   <a href={article.url} target="_blank" rel="noopener noreferrer">
                     Read more
                   </a>
+                  {/* Button to navigate to another page moved below the link */}
+                  <div className="mt-2"> {/* Add margin-top for spacing */}
+                    <button className='viewPortBtn' onClick={() => handleNavigate(article.title)}>
+                      View Ports Affected
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
