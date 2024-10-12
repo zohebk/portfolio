@@ -5,9 +5,11 @@ import { Home } from "../pages/home";
 import { Portfolio } from "../pages/portfolio";
 import { ContactUs } from "../pages/contact";
 import { CrisisPage } from "../pages/crisis";
-import { PortsAffectedPage } from "../pages/affectedPorts";
+import { ReportPage } from "../pages/affectedPorts";
 import { Socialicons } from "../components/socialicons";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { PortReport } from "../pages/wholePort"; // Import the PortReport component
+
 
 const AnimatedRoutes = withRouter(({ location }) => (
   <TransitionGroup>
@@ -23,9 +25,10 @@ const AnimatedRoutes = withRouter(({ location }) => (
       <Routes location={location}>
         <Route exact path="/" element={<Home />} />
         <Route path="/crisis" element={<CrisisPage />} /> 
-        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/ports-affected" element={<Portfolio />} />
+        <Route path="/reportPage" element={<ReportPage />} /> 
+        <Route path ="/portreport" element={<PortReport/>} />
         <Route path="/contact" element={<ContactUs />} />
-        <Route path="/ports-affected" element={<PortsAffectedPage />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </CSSTransition>

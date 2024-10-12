@@ -30,6 +30,7 @@ export const CrisisPage = () => {
     navigate("/ports-affected", { state: { articleTitle } });
   };
 
+
   return (
     <HelmetProvider>
       <Container className="CrisisPage-header">

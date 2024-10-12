@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation to get the passed state
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
@@ -6,6 +7,8 @@ import { dataportfolio, meta } from "../../content_option";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import arrow icons
 
 export const Portfolio = () => {
+  const location = useLocation(); // Access the location object to get the state
+  const articleTitle = location.state?.articleTitle || "No Title Provided"; // Get the passed articleTitle, fallback if not provided
   const [selectedPorts, setSelectedPorts] = useState({});
 
   const handlePortClick = (port) => {
@@ -17,24 +20,39 @@ export const Portfolio = () => {
     });
   };
 
+  const handleGenerateReport = (shipName) => {
+    // Encode the ship name in the URL
+    const reportUrl = `/reportPage?shipName=${encodeURIComponent(shipName)}`;
+    window.open(reportUrl, "_blank");
+  };
+  
+  const handlePortReport = (portName) => {
+    const reportUrl = `/portreport?portName=${encodeURIComponent(portName)}`;
+    window.open(reportUrl, "_blank");
+  };
+  
+  
+  
+
   return (
     <HelmetProvider>
       <Container className="About-header">
         <Helmet>
           <meta charSet="utf-8" />
-          <title>Red Sea Crisis | {meta.title}</title>
+          <title>{articleTitle} | {meta.title}</title>
           <meta name="description" content={meta.description} />
         </Helmet>
 
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
-            <h1 className="display-4 mb-4">Hurricane Katrina</h1>
+            {/* Replace "Hurricane Katrina" with the dynamically passed articleTitle */}
+            <h1 className="display-4 mb-4">{articleTitle}</h1>
             <hr className="t_border my-4 ml-0 text-left" />
           </Col>
         </Row>
 
         {/* Ports Affected Header with Toggle */}
-        <div className="mb-5 mt-3 pt-md-3">
+        <div className="general">
           <Col lg="14">
             <h1
               className="display-4 mb-4"
@@ -55,7 +73,7 @@ export const Portfolio = () => {
                 <div
                   key={i}
                   className="port-item"
-                  style={{ cursor: "pointer"}}
+                  style={{ cursor: "pointer" }}
                   onClick={() => handlePortClick(data)}
                 >
                   {/* Port Name */}
@@ -98,7 +116,6 @@ export const Portfolio = () => {
                                       <tr key={shipIndex}>
                                         <td>{ship.nameShip}</td>
 
-                                        {/* Corrected: Iterate over the `ogTime` and `newTime` arrays to get values per ship */}
                                         <td>
                                           {berth.ogTime[shipIndex]
                                             ? berth.ogTime[shipIndex].time
@@ -111,7 +128,10 @@ export const Portfolio = () => {
                                             : "-"}
                                         </td>
                                         <td>
-                                          <button className="generateButton">Generate</button>
+                                          <button className="generateButton"
+                                          onClick={() => handleGenerateReport(ship.nameShip)}>
+                                            Generate
+                                          </button>
                                         </td>
                                       </tr>
                                     ))}
@@ -122,6 +142,8 @@ export const Portfolio = () => {
                           ))}
                         </tbody>
                       </table>
+                      <button className="portbutton" onClick={()=> handlePortReport(data.portName)}>
+                        General port report</button>
                     </div>
                   )}
                 </div>
