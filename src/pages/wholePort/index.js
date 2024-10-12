@@ -2,7 +2,8 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { dataportfolio } from "../../content_option";  // Import the data
+import { dataportfolio, schedule } from "../../content_option";  // Import the data
+import html2pdf from "html2pdf.js"; // Import html2pdf.js
 
 export const PortReport = () => {
     const location = useLocation();
@@ -10,6 +11,35 @@ export const PortReport = () => {
 
     // Find the port by its name
     const portData = dataportfolio.find((port) => port.portName === portName);
+
+    const downloadPDF = () => {
+        const element = document.getElementById("full-report"); // Select the entire report container
+        const downloadButton = document.querySelector("button"); // Select the download button
+    
+        if (!element) {
+            console.error("Report content not found!");
+            return;
+        }
+    
+        // Hide the download button temporarily
+        downloadButton.style.display = "none";
+    
+        const opt = {
+            margin: 10,
+            filename: `port_report_${portName}.pdf`,  // Change to a suitable filename
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+        };
+    
+        // Generate PDF and download
+        html2pdf().from(element).set(opt).save().then(() => {
+            // Show the button again after the PDF is generated
+            downloadButton.style.display = "block";
+        });
+    };
+    
+    
 
     return (
         <HelmetProvider>
@@ -37,20 +67,22 @@ export const PortReport = () => {
                                 {portData?.berths.map((berth, index) => (
                                     <div key={index}>
                                         <h3>{berth.name}</h3>
-                                        <table className="table">
+                                        <table className="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
                                                     <th>Ship Name</th>
-                                                    <th>Original Arrival Time</th>
-                                                    <th>New Estimated Arrival Time</th>
+                                                    <th>Ship ID</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {berth.Ships_affected.map((ship, shipIndex) => (
+                                                {schedule.map((shipSchedule, shipIndex) => (
                                                     <tr key={shipIndex}>
-                                                        <td>{ship.nameShip}</td>
-                                                        <td>{ship.arrivalTime}</td>
-                                                        <td>{ship.newTime}</td>
+                                                        <td>{shipSchedule.date}</td>
+                                                        <td>{shipSchedule.time}</td>
+                                                        <td>{shipSchedule.shipName}</td>
+                                                        <td>{shipSchedule.shipID}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -58,6 +90,9 @@ export const PortReport = () => {
                                     </div>
                                 ))}
                             </div>
+                            <button onClick={downloadPDF}>
+                                Download PDF
+                            </button>
                         </Col>
                     </Row>
                 </div>
