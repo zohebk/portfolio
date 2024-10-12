@@ -1,0 +1,93 @@
+/* General Container Styling */
+.Container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header Styling */
+  h1 {
+    font-size: 2.5rem;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  /* Subheading Styling for Ports */
+  h3 {
+    font-size: 1.8rem;
+    color: #007bff;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  
+  /* Paragraph Styling */
+  p {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Border under header */
+  .t_border {
+    border-top: 2px solid #007bff;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  /* Specific Styling for Port Info Boxes */
+  .port-info {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+  
+  /* Specific Styling for the Port Headers */
+  .port-info h3 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  
+  /* Specific Styling for Port Descriptions */
+  .port-info p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  /* Add any hover effect for links if needed */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive Design */
+  @media only screen and (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  
+    h3 {
+      font-size: 1.4rem;
+    }
+  
+    p {
+      font-size: 1rem;
+    }
+  
+    .Container {
+      padding: 15px;
+    }
+  }
+  
