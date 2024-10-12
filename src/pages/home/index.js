@@ -7,7 +7,7 @@ import L, { map } from "leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import shipIconUrl from '../../assets/images/cargo-ship_870107.png';
-import alertIconUrl from '../../assets/images/alert.png';
+import { useNavigate } from "react-router-dom";
 
 // Default icon configuration (optional for Leaflet marker icons)
 delete L.Icon.Default.prototype._getIconUrl;
@@ -34,6 +34,7 @@ const getIconSize = (impactRadius) => {
 export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const aisData = [{
     Route: [
@@ -94,6 +95,7 @@ export const Home = () => {
         type: 'Earthquake',
         description: 'Magnitude 5.6 earthquake',
         impactRadius: 500,
+        articleTitle: "Magnitude 5.6 Earthquake Strikes San Francisco Bay Area",
       },
     },
     {
@@ -105,6 +107,8 @@ export const Home = () => {
         type: 'Flood',
         description: 'Severe flooding warning',
         impactRadius: 200,
+        articleTitle: "Severe Flooding Warning Issued for New York City",
+
       },
     },
     {
@@ -116,11 +120,15 @@ export const Home = () => {
         type: 'Tsunami',
         description: 'Tsunami alert following earthquake',
         impactRadius: 1000,
+        articleTitle: "Tsunami Alert Issued Following Earthquake Near Japan",
       },
     },
   ];
   
 
+  const handleNavigate = (articleTitle) => {
+    navigate("/ports-affected", { state: { articleTitle } });
+  };
   return (
     <HelmetProvider>
       <section id="home" className="home">
@@ -201,6 +209,7 @@ export const Home = () => {
                             <h3>{alert.info.type}</h3>
                             <p>{alert.info.description}</p>
                             <p><strong>Impact Radius: </strong>{alert.info.impactRadius} km</p>
+                            <button onClick={() => handleNavigate(alert.info.articleTitle)}>View ports affected</button>
                         </Popup>
                         </Marker>
                     ))}
