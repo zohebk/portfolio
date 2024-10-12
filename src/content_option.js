@@ -72,6 +72,37 @@ const services = [{
     },
 ];
 
+const schedule = [
+    {
+        date: "19/03/2024",
+        time: "13:00",
+        shipName: "Aye Aye",
+        shipID: "10130"
+
+    },
+    {
+        date: "21/03/2024",
+        time: "19:00",
+        shipName: "Meow",
+        shipID: "10131"
+
+    },
+    {
+        date: "03/09/2024",
+        time: "16:30",
+        shipName: "Mermaid",
+        shipID: "10110"
+
+    },
+    {
+        date: "09/10/2024",
+        time: "17:00",
+        shipName: "Spongebob",
+        shipID: "10139"
+
+    }
+];
+
 const dataportfolio = [
     {
         portName: "Port of Singapore",
@@ -96,12 +127,6 @@ const dataportfolio = [
                     { time: "18:00" },
                     { time: "22:00" }
                 ],
-                Rerouted : [
-                    "Y", "N", "Y"
-                ],
-                rerouteDest: [
-                    "SCS Port", "NIL", "Port of Melayu"
-                ]
             },
             {
                 name: "Berth 2", 
@@ -204,4 +229,5 @@ export {
     contactConfig,
     socialprofils,
     logotext,
+    schedule
 };
