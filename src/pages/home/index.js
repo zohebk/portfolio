@@ -7,6 +7,7 @@ import L, { map } from "leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import shipIconUrl from '../../assets/images/cargo-ship_870107.png';
+import alertIconUrl from '../../assets/images/alert.png';
 
 // Default icon configuration (optional for Leaflet marker icons)
 delete L.Icon.Default.prototype._getIconUrl;
@@ -23,6 +24,12 @@ const shipIcon = new L.Icon({
   popupAnchor: [0, -35], // The point from which the popup should open relative to the iconAnchor
 });
 
+const getIconSize = (impactRadius) => {
+    const baseSize = 30; // Base size for a minimal disaster
+    const scaleFactor = 0.05; // You can adjust this scale factor
+    const scaledSize = baseSize + (impactRadius * scaleFactor);
+    return [scaledSize, scaledSize]; // Return as [width, height]
+  };
 
 export const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -77,7 +84,42 @@ export const Home = () => {
     }
  }]
 
-
+ const alertData = [
+    {
+      location: {
+        latitude: 37.7749,
+        longitude: -122.4194,
+      },
+      info: {
+        type: 'Earthquake',
+        description: 'Magnitude 5.6 earthquake',
+        impactRadius: 500,
+      },
+    },
+    {
+      location: {
+        latitude: 40.7128,
+        longitude: -74.0060,
+      },
+      info: {
+        type: 'Flood',
+        description: 'Severe flooding warning',
+        impactRadius: 200,
+      },
+    },
+    {
+      location: {
+        latitude: 35.6762,
+        longitude: 139.6503,
+      },
+      info: {
+        type: 'Tsunami',
+        description: 'Tsunami alert following earthquake',
+        impactRadius: 1000,
+      },
+    },
+  ];
+  
 
   return (
     <HelmetProvider>
@@ -141,6 +183,26 @@ export const Home = () => {
                             />
                         ))}
                       </React.Fragment>
+                    ))}
+
+                    {/* Displaying disaster alerts */}
+                    {alertData.map((alert, index) => (
+                        <Marker
+                        key={index}
+                        position={[alert.location.latitude, alert.location.longitude]}
+                        icon={new L.DivIcon({
+                            className: 'blinking-icon', // Applying the CSS class for the blinking effect
+                            iconSize: getIconSize(alert.info.impactRadius),
+                            iconAnchor: [getIconSize(alert.info.impactRadius)[0] / 2, getIconSize(alert.info.impactRadius)[1] / 2],
+                            popupAnchor: [0, -getIconSize(alert.info.impactRadius)[1] / 2],
+                          })}
+                        >
+                        <Popup>
+                            <h3>{alert.info.type}</h3>
+                            <p>{alert.info.description}</p>
+                            <p><strong>Impact Radius: </strong>{alert.info.impactRadius} km</p>
+                        </Popup>
+                        </Marker>
                     ))}
                   </MapContainer>
                 )}

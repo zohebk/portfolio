@@ -7,3 +7,15 @@
     flex-direction: column;
     height: 100vh; /* Full height of the viewport */
 }
+
+.blinking-icon {
+    background: url('../../assets/images/alert.png') no-repeat center center;
+    background-size: contain;
+    animation: blinker 2s linear infinite;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0.3;
+    }
+  }
