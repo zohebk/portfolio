@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import L, { map } from "leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import shipIconUrl from '../../assets/images/cargo-ship_870107.png';
+import alertIconUrl from '../../assets/images/alert.png';
 
 // Default icon configuration (optional for Leaflet marker icons)
 delete L.Icon.Default.prototype._getIconUrl;
@@ -23,43 +24,102 @@ const shipIcon = new L.Icon({
   popupAnchor: [0, -35], // The point from which the popup should open relative to the iconAnchor
 });
 
+const getIconSize = (impactRadius) => {
+    const baseSize = 30; // Base size for a minimal disaster
+    const scaleFactor = 0.05; // You can adjust this scale factor
+    const scaledSize = baseSize + (impactRadius * scaleFactor);
+    return [scaledSize, scaledSize]; // Return as [width, height]
+  };
 
 export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const aisData = [{
-    "Message":{
-       "PositionReport":{
-          "Cog":308,
-          "CommunicationState":81982,
-          "Latitude":66.02695,
-          "Longitude":12.253821666666665,
-          "MessageID":1,
-          "NavigationalStatus":15,
-          "PositionAccuracy":true,
-          "Raim":false,
-          "RateOfTurn":4,
-          "RepeatIndicator":0,
-          "Sog":0,
-          "Spare":0,
-          "SpecialManoeuvreIndicator":0,
-          "Timestamp":31,
-          "TrueHeading":235,
-          "UserID":259000420,
-          "Valid":true
-       }
-    },
-    "MessageType":"PositionReport",
-    "MetaData":{
+    Route: [
+      {
+        latitude: 66.02695,
+        longitude: 12.253821666666665,
+      },
+      {
+        latitude: 67.0,
+        longitude: 13.0,
+      },
+      {
+        latitude: 68.0,
+        longitude: 14.0,
+      },
+      {
+        latitude: 69.0,
+        longitude: 15.0,
+      }
+    ],
+    "info":{
        "MMSI":259000420,
        "ShipName":"AUGUSTSON",
-       "latitude":66.02695,
-       "longitude":12.253821666666665,
-       "time_utc":"2022-12-29 18:22:32.318353 +0000 UTC"
+    }
+ },
+ {
+  Route: [
+    {
+      latitude: 35.6895,
+      longitude: 139.6917, // Tokyo coordinates
+    },
+    {
+      latitude: 36.0,
+      longitude: 140.0,
+    },
+    {
+      latitude: 37.0,
+      longitude: 141.0,
+    },
+    {
+      latitude: 38.0,
+      longitude: 142.0,
+    }
+    ],
+    info: {
+      MMSI: 123456789,
+      ShipName: "SEASPRAY",
     }
  }]
 
+ const alertData = [
+    {
+      location: {
+        latitude: 37.7749,
+        longitude: -122.4194,
+      },
+      info: {
+        type: 'Earthquake',
+        description: 'Magnitude 5.6 earthquake',
+        impactRadius: 500,
+      },
+    },
+    {
+      location: {
+        latitude: 40.7128,
+        longitude: -74.0060,
+      },
+      info: {
+        type: 'Flood',
+        description: 'Severe flooding warning',
+        impactRadius: 200,
+      },
+    },
+    {
+      location: {
+        latitude: 35.6762,
+        longitude: 139.6503,
+      },
+      info: {
+        type: 'Tsunami',
+        description: 'Tsunami alert following earthquake',
+        impactRadius: 1000,
+      },
+    },
+  ];
+  
 
   return (
     <HelmetProvider>
@@ -82,30 +142,67 @@ export const Home = () => {
                   <MapContainer
                     center={[0,0]} // Center the map on the ship's position
                     zoom={2} // Zoom in closer
-                    style={{ height: "100vh", width: "100vw" }}
+                    className="mapCont"
                   >
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
                     {aisData.map((vessel, index) => (
-                      <Marker
-                      key={index}
-                      position={[
-                        vessel.Message.PositionReport.Latitude,
-                        vessel.Message.PositionReport.Longitude,
-                      ]}
-                      icon={shipIcon}
-                      >
+                      <React.Fragment key={index}>
+                        <Marker
+                          position={[
+                            vessel.Route[0].latitude,
+                            vessel.Route[0].longitude,
+                          ]}
+                          icon={shipIcon}
+                        >
+                          <Popup>
+                            <div>
+                              <h3>{vessel.info.ShipName || "Unknown Vessel"}</h3>
+                              <p><strong>MMSI:</strong> {vessel.info.MMSI}</p>
+                              <p><strong>Latitude:</strong> {vessel.Route[0].latitude}</p>
+                              <p><strong>Longitude:</strong> {vessel.Route[0].longitude}</p>
+                            </div>
+                          </Popup>
+                        </Marker>
+
+                        {/* Create the polyline for the projected route */}
+                        <Polyline
+                          positions={vessel.Route.map(point => [point.latitude, point.longitude])}
+                          color="grey" // You can customize the color here
+                          weight={3} // Customize the weight of the polyline
+                        />
+
+                        {vessel.Route.slice(1).map((point, pointIndex) => (
+                            <CircleMarker
+                                key={`future-${index}-${pointIndex}`}
+                                center={[point.latitude, point.longitude]}
+                                radius={3} // Size of the black dot
+                                pathOptions={{ color: 'black', fillColor: 'black', fillOpacity: 1 }}
+                            />
+                        ))}
+                      </React.Fragment>
+                    ))}
+
+                    {/* Displaying disaster alerts */}
+                    {alertData.map((alert, index) => (
+                        <Marker
+                        key={index}
+                        position={[alert.location.latitude, alert.location.longitude]}
+                        icon={new L.DivIcon({
+                            className: 'blinking-icon', // Applying the CSS class for the blinking effect
+                            iconSize: getIconSize(alert.info.impactRadius),
+                            iconAnchor: [getIconSize(alert.info.impactRadius)[0] / 2, getIconSize(alert.info.impactRadius)[1] / 2],
+                            popupAnchor: [0, -getIconSize(alert.info.impactRadius)[1] / 2],
+                          })}
+                        >
                         <Popup>
-                          <div>
-                            <h3>{vessel.MetaData.ShipName || "Unknown Vessel"}</h3>
-                            <p><strong>MMSI:</strong> {vessel.MetaData.MMSI}</p>
-                            <p><strong>Latitude:</strong> {vessel.MetaData.latitude}</p>
-                            <p><strong>Longitude:</strong> {vessel.MetaData.longitude}</p>
-                          </div>
+                            <h3>{alert.info.type}</h3>
+                            <p>{alert.info.description}</p>
+                            <p><strong>Impact Radius: </strong>{alert.info.impactRadius} km</p>
                         </Popup>
-                      </Marker>
+                        </Marker>
                     ))}
                   </MapContainer>
                 )}
