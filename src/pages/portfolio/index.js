@@ -10,13 +10,15 @@ export const Portfolio = () => {
   const location = useLocation();
   const articleTitle = location.state?.articleTitle || "No Title Provided";
   const [selectedPorts, setSelectedPorts] = useState({});
+
   const [records, setRecords] = useState([]);
   const [display, setDisplay] = useState();
+
 
   const fetchShipData = async () => {
     try {
       const newsTitle = articleTitle;
-      const response = await fetch("http://localhost:3001/api/record", {
+      const response = await fetch("http://localhost:3001/api/record/hi", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,6 +75,7 @@ export const Portfolio = () => {
         newBerth,
         newETA,
         portName: portNameIndiv,
+
       };
       listOfSubRecords.push(subRecord);
     });
