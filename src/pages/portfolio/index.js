@@ -11,11 +11,12 @@ export const Portfolio = () => {
   const articleTitle = location.state?.articleTitle || "No Title Provided"; // Get the passed articleTitle, fallback if not provided
   const [selectedPorts, setSelectedPorts] = useState({});
   const [records, setRecords] = useState(0);
+  const [reload, setReload] = useState(0);
 
   const fetchShipData = async () => {
     try {
       const newsTitle = articleTitle;
-      const response = await fetch("http://localhost:3001/api/record", {
+      const response = await fetch("http://localhost:3001/api/record/hi", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,12 +24,16 @@ export const Portfolio = () => {
         body: JSON.stringify({ newsTitle }), // Send newsTitle in the body
       });
       const data = await response.json();
-      setRecords(data[0].shipName);
+      setRecords(data[0].shipId);
     } catch (err) {
       setRecords("ERROR");
       alert(err);
     }
   }
+
+  useEffect(() => {
+    fetchShipData()
+  },[reload])
 
   const handlePortClick = (port) => {
     setSelectedPorts((prevState) => {
