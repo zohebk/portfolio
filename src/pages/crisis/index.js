@@ -61,7 +61,8 @@ export const CrisisPage = () => {
 
         const data = await response.json();
         if (response.ok) {
-        console.log(data.message); // Log success message
+        console.log(data.message);
+        fetchNewsData(); // Log success message
         } else {
         console.error(data.message); // Log error message
         }
@@ -75,7 +76,7 @@ export const CrisisPage = () => {
     const articleTitle = newsArticle.title;
 
     try {
-        const response = await fetch('http://localhost:3000/api/news/updateAccept', {
+        const response = await fetch('http://localhost:3001/api/news/updateAccept', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -88,7 +89,8 @@ export const CrisisPage = () => {
 
         const data = await response.json();
         if (response.ok) {
-        console.log(data.message); // Log success message
+        console.log(data.message); 
+        fetchNewsData();// Log success message
         } else {
         console.error(data.message); // Log error message
         }
@@ -126,8 +128,7 @@ export const CrisisPage = () => {
                       <div className="actBtnDiv">
                       {article.accepted ? (
                         <button
-                          className="removeBtn clickBtn"
-                          style={{ marginLeft: 10, backgroundColor: "orange", color: "white" }}
+                          className="removeBtn newsBtn"
                           onClick={() => handleDecline(article)} // You might want to implement a remove action here
                         >
                           Remove
@@ -135,14 +136,14 @@ export const CrisisPage = () => {
                       ) : (
                         <>
                           <button
-                            className="acceptBtn clickBtn"
+                            className="acceptBtn clickBtn newsBtn"
                             style={{ marginLeft: 10, backgroundColor: "green", color: "white" }}
                             onClick={() => handleAccept(article)}
                           >
                             <img src={acceptIcon} alt="Accept" style={{ width: 30, height: 30 }} />
                           </button>
                           <button
-                            className="declineBtn clickBtn"
+                            className="declineBtn clickBtn newsBtn"
                             style={{ marginLeft: 10, backgroundColor: "#e40000", color: "white" }}
                             onClick={() => handleDecline(article)}
                           >

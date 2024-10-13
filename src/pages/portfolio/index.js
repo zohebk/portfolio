@@ -64,9 +64,6 @@ export const Portfolio = () => {
           <meta name="description" content={meta.description} />
         </Helmet>
 
-        <button onClick={() => fetchShipData()}>here</button>
-        <p>{records}</p>
-
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
             {/* Replace "Hurricane Katrina" with the dynamically passed articleTitle */}
