@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom"; // Import useLocation to get the passed state
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Alert } from "react-bootstrap";
 import { dataportfolio, meta } from "../../content_option";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import arrow icons
 
@@ -10,6 +10,25 @@ export const Portfolio = () => {
   const location = useLocation(); // Access the location object to get the state
   const articleTitle = location.state?.articleTitle || "No Title Provided"; // Get the passed articleTitle, fallback if not provided
   const [selectedPorts, setSelectedPorts] = useState({});
+  const [records, setRecords] = useState(0);
+
+  const fetchShipData = async () => {
+    try {
+      const newsTitle = articleTitle;
+      const response = await fetch("http://localhost:3001/api/record", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newsTitle }), // Send newsTitle in the body
+      });
+      const data = await response.json();
+      setRecords(data[0].shipName);
+    } catch (err) {
+      setRecords("ERROR");
+      alert(err);
+    }
+  }
 
   const handlePortClick = (port) => {
     setSelectedPorts((prevState) => {
@@ -25,14 +44,11 @@ export const Portfolio = () => {
     const reportUrl = `/reportPage?shipName=${encodeURIComponent(shipName)}`;
     window.open(reportUrl, "_blank");
   };
-  
+
   const handlePortReport = (portName) => {
     const reportUrl = `/portreport?portName=${encodeURIComponent(portName)}`;
     window.open(reportUrl, "_blank");
   };
-  
-  
-  
 
   return (
     <HelmetProvider>
@@ -42,6 +58,9 @@ export const Portfolio = () => {
           <title>{articleTitle} | {meta.title}</title>
           <meta name="description" content={meta.description} />
         </Helmet>
+
+        <button onClick={() => fetchShipData()}>here</button>
+        <p>{records}</p>
 
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
@@ -96,9 +115,6 @@ export const Portfolio = () => {
                           {data.berths.map((berth, index) => (
                             <tr key={index}>
                               <td>{berth.name}</td>
-                              <td>{berth.capacity}</td>
-                              <td>{berth.status}</td>
-                              <td>{berth.lotsavail}</td>
 
                               {/* Nested table inside "Ships affected" column */}
                               <td>
@@ -129,7 +145,7 @@ export const Portfolio = () => {
                                         </td>
                                         <td>
                                           <button className="generateButton"
-                                          onClick={() => handleGenerateReport(ship.nameShip)}>
+                                            onClick={() => handleGenerateReport(ship.nameShip)}>
                                             Generate
                                           </button>
                                         </td>
@@ -142,7 +158,7 @@ export const Portfolio = () => {
                           ))}
                         </tbody>
                       </table>
-                      <button className="portbutton" onClick={()=> handlePortReport(data.portName)}>
+                      <button className="portbutton" onClick={() => handlePortReport(data.portName)}>
                         General port report</button>
                     </div>
                   )}
