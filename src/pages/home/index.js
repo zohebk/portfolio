@@ -46,7 +46,7 @@ export const Home = () => {
 
     socket.addEventListener('message', (event) => {
       const newMessage = event.data;
-      setReload(reload => reload + 1); // Use a function to ensure correct state update
+      setReload(reload => reload + 1);
     });
 
     return () => {
