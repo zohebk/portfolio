@@ -37,6 +37,7 @@ export const Home = () => {
   const navigate = useNavigate();
   const [reload, setReload] = useState(0);
   const [records, setRecords] = useState([]);
+  const [alert, setAlerts] = useState([]);
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:3002');
@@ -59,54 +60,20 @@ export const Home = () => {
     fetchVesselData();
   }, [reload]);
 
-  const aisData = [{
-    Route: [
-      {
-        latitude: 66.02695,
-        longitude: 12.253821666666665,
-      },
-      {
-        latitude: 67.0,
-        longitude: 13.0,
-      },
-      {
-        latitude: 68.0,
-        longitude: 14.0,
-      },
-      {
-        latitude: 69.0,
-        longitude: 15.0,
-      }
-    ],
-    "info": {
-      "MMSI": 259000420,
-      "ShipName": "AUGUSTSON",
+  // Fetching crisis-related news data
+  useEffect(() => {
+    fetchNewsData();
+  }, [reload]);
+
+  const fetchNewsData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/news");
+      const data = await response.json();
+      setAlerts(data);
+    } catch (err) {
+      alert(err);
     }
-  },
-  {
-    Route: [
-      {
-        latitude: 35.6895,
-        longitude: 139.6917, // Tokyo coordinates
-      },
-      {
-        latitude: 36.0,
-        longitude: 140.0,
-      },
-      {
-        latitude: 37.0,
-        longitude: 141.0,
-      },
-      {
-        latitude: 38.0,
-        longitude: 142.0,
-      }
-    ],
-    info: {
-      MMSI: 123456789,
-      ShipName: "SEASPRAY",
-    }
-  }]
+  }
 
   const alertData = [
     {
@@ -169,6 +136,14 @@ export const Home = () => {
     navigate("/ports-affected", { state: { articleTitle } });
   };
 
+  const radius = (long1, long2, lat1, lat2) => {
+    const deltaLatitude = lat2 - lat1;
+    const deltaLongitude = long2 - long1;
+
+    // Calculate the hypotenuse length
+    const hypotenuse = Math.sqrt(deltaLatitude ** 2 + deltaLongitude ** 2)/2;
+    return hypotenuse;
+  }
   
   return (
     <HelmetProvider>
@@ -235,25 +210,52 @@ export const Home = () => {
                 ))}
 
                 {/* Displaying disaster alerts */}
-                {alertData.map((alert, index) => (
-                  <Marker
-                    key={index}
-                    position={[alert.location.latitude, alert.location.longitude]}
-                    icon={new L.DivIcon({
-                      className: 'blinking-icon', // Applying the CSS class for the blinking effect
-                      iconSize: getIconSize(alert.info.impactRadius),
-                      iconAnchor: [getIconSize(alert.info.impactRadius)[0] / 2, getIconSize(alert.info.impactRadius)[1] / 2],
-                      popupAnchor: [0, -getIconSize(alert.info.impactRadius)[1] / 2],
-                    })}
-                  >
-                    <Popup>
-                      <h3>{alert.info.type}</h3>
-                      <p>{alert.info.description}</p>
-                      <p><strong>Impact Radius: </strong>{alert.info.impactRadius} km</p>
-                      <button className="viewPortBtn" onClick={() => handleNavigate(alert.info.articleTitle)}>View ports affected</button>
-                    </Popup>
-                  </Marker>
-                ))}
+                {alert.map((alert, index) => {
+                  const latitude1 = alert.latitude1;
+                  const latitude2 = alert.latitude2;
+                  const longitude1 = alert.longitude1;
+                  const longitude2 = alert.longitude2;
+
+                  // Check if the coordinates are valid numbers before proceeding
+                  if (
+                    typeof latitude1 === 'number' && 
+                    typeof latitude2 === 'number' &&
+                    typeof longitude1 === 'number' && 
+                    typeof longitude2 === 'number'
+                  ) {
+                    const midLatitude = (latitude1 + latitude2) / 2;
+                    const midLongitude = (longitude1 + longitude2) / 2;
+                    const impactRadius = radius(longitude1, longitude2, latitude1, latitude2);
+
+                    return (
+                      <Marker
+                        key={index}
+                        position={[midLatitude, midLongitude]}
+                        icon={new L.DivIcon({
+                          className: 'blinking-icon',
+                          iconSize: getIconSize(impactRadius),
+                          iconAnchor: [
+                            getIconSize(impactRadius)[0] / 2,
+                            getIconSize(impactRadius)[1] / 2,
+                          ],
+                          popupAnchor: [0, -getIconSize(impactRadius)[1] / 2],
+                        })}
+                      >
+                        <Popup>
+                          <h3>{alert.title}</h3>
+                          <p>{alert.description}</p>
+                          <p><strong>Impact Radius: </strong>{impactRadius} km</p>
+                          <button className="viewPortBtn" onClick={() => handleNavigate(alert.info.articleTitle)}>
+                            View ports affected
+                          </button>
+                        </Popup>
+                      </Marker>
+                    );
+                  } else {
+                    console.warn("Invalid coordinates for alert", alert);
+                    return null; // Skip rendering if coordinates are invalid
+                  }
+                })}
               </MapContainer>
             )}
           </div>
