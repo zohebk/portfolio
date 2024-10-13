@@ -33,6 +33,16 @@ const Headermain = () => {
     };
   }, []);
 
+  const increaseTime = async () => {
+    const response = await fetch("http://localhost:3001/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({message:"hi"}), // Send newsTitle in the body
+    });
+  }
+
   return (
     <>
       <header className="fixed-top site__header">
@@ -41,6 +51,7 @@ const Headermain = () => {
             {logotext}
           </Link>
           <p>{time}</p>
+          <button onClick={() => increaseTime()}>Increase Time</button>
           <div className="d-flex align-items-center">
 
             <button className="menu__button  nav_ac" onClick={handleToggle}>
