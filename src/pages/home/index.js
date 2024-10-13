@@ -36,6 +36,7 @@ export const Home = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [reload, setReload] = useState(0);
+  const [records, setRecords] = useState([]);
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:3002');
@@ -55,7 +56,7 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log("hi");
+    fetchVesselData();
   }, [reload]);
 
   const aisData = [{
@@ -147,10 +148,28 @@ export const Home = () => {
     },
   ];
 
+  const fetchVesselData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/vessel/all", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setRecords(data);
+      console.log(records);
+    } catch (err) {
+      setRecords("ERROR");
+      alert(err);
+    }
+  }
 
   const handleNavigate = (articleTitle) => {
     navigate("/ports-affected", { state: { articleTitle } });
   };
+
+  
   return (
     <HelmetProvider>
       <section id="home" className="home">
@@ -178,12 +197,12 @@ export const Home = () => {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {aisData.map((vessel, index) => (
+                {records.map((vessel, index) => (
                   <React.Fragment key={index}>
                     <Marker
                       position={[
-                        vessel.Route[0].latitude,
-                        vessel.Route[0].longitude,
+                        vessel.routes[0].latitude,
+                        vessel.routes[0].longitude,
                       ]}
                       icon={shipIcon}
                     >
@@ -191,20 +210,20 @@ export const Home = () => {
                         <div>
                           <h3>{vessel.info.ShipName || "Unknown Vessel"}</h3>
                           <p><strong>MMSI:</strong> {vessel.info.MMSI}</p>
-                          <p><strong>Latitude:</strong> {vessel.Route[0].latitude}</p>
-                          <p><strong>Longitude:</strong> {vessel.Route[0].longitude}</p>
+                          <p><strong>Latitude:</strong> {vessel.routes[0].latitude}</p>
+                          <p><strong>Longitude:</strong> {vessel.routes[0].longitude}</p>
                         </div>
                       </Popup>
                     </Marker>
 
                     {/* Create the polyline for the projected route */}
                     <Polyline
-                      positions={vessel.Route.map(point => [point.latitude, point.longitude])}
+                      positions={vessel.routes.map(point => [point.latitude, point.longitude])}
                       color="grey" // You can customize the color here
                       weight={3} // Customize the weight of the polyline
                     />
 
-                    {vessel.Route.slice(1).map((point, pointIndex) => (
+                    {vessel.routes.slice(1).map((point, pointIndex) => (
                       <CircleMarker
                         key={`future-${index}-${pointIndex}`}
                         center={[point.latitude, point.longitude]}
