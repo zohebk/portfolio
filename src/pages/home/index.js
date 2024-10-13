@@ -163,7 +163,6 @@ export const Home = () => {
         <div>
           <div>
             <h2 className="mb-1x">Live AIS Vessel Data on Map</h2>
-            <text>{reload}</text>
 
             {loading ? (
               <p>Loading AIS data...</p>

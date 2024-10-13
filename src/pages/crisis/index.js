@@ -7,23 +7,36 @@ import { Container, Row, Col } from "react-bootstrap";
 export const CrisisPage = () => {
   const [newsArticles, setNewsArticles] = useState([]);
   const navigate = useNavigate(); // Initialize useNavigate
+  const [reload, setReload] = useState(0);
+
+  const fetchNewsData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/news");
+      const data = await response.json();
+      setNewsArticles(data);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:3002');
+
+    socket.addEventListener('open', () => {});
+
+    socket.addEventListener('message', (event) => {
+      setReload(reload => reload + 1);
+    });
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   // Fetching crisis-related news data
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch(
-          `https://newsapi.org/v2/everything?q=crisis&apiKey=925e84534f414b00923ae341b365c582`
-        );
-        const data = await response.json();
-        setNewsArticles(data.articles);
-      } catch (error) {
-        console.error("Error fetching crisis news:", error);
-      }
-    };
-
-    fetchNews();
-  }, []);
+    fetchNewsData();
+  }, [reload]);
 
   // Handle navigation to another page with articleTitle passed as state
   const handleNavigate = (articleTitle) => {
