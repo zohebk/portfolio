@@ -128,7 +128,7 @@ export const CrisisPage = () => {
                       <div className="actBtnDiv">
                       {article.accepted ? (
                         <button
-                          className="removeBtn"
+                          className="removeBtn newsBtn"
                           onClick={() => handleDecline(article)} // You might want to implement a remove action here
                         >
                           Remove
@@ -136,14 +136,14 @@ export const CrisisPage = () => {
                       ) : (
                         <>
                           <button
-                            className="acceptBtn clickBtn"
+                            className="acceptBtn clickBtn newsBtn"
                             style={{ marginLeft: 10, backgroundColor: "green", color: "white" }}
                             onClick={() => handleAccept(article)}
                           >
                             <img src={acceptIcon} alt="Accept" style={{ width: 30, height: 30 }} />
                           </button>
                           <button
-                            className="declineBtn clickBtn"
+                            className="declineBtn clickBtn newsBtn"
                             style={{ marginLeft: 10, backgroundColor: "#e40000", color: "white" }}
                             onClick={() => handleDecline(article)}
                           >

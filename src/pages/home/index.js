@@ -75,46 +75,6 @@ export const Home = () => {
     }
   }
 
-  const alertData = [
-    {
-      location: {
-        latitude: 37.7749,
-        longitude: -122.4194,
-      },
-      info: {
-        type: 'Earthquake',
-        description: 'Magnitude 5.6 earthquake',
-        impactRadius: 500,
-        articleTitle: "Magnitude 5.6 Earthquake Strikes San Francisco Bay Area",
-      },
-    },
-    {
-      location: {
-        latitude: 40.7128,
-        longitude: -74.0060,
-      },
-      info: {
-        type: 'Flood',
-        description: 'Severe flooding warning',
-        impactRadius: 200,
-        articleTitle: "Severe Flooding Warning Issued for New York City",
-
-      },
-    },
-    {
-      location: {
-        latitude: 35.6762,
-        longitude: 139.6503,
-      },
-      info: {
-        type: 'Tsunami',
-        description: 'Tsunami alert following earthquake',
-        impactRadius: 1000,
-        articleTitle: "Tsunami Alert Issued Following Earthquake Near Japan",
-      },
-    },
-  ];
-
   const fetchVesselData = async () => {
     try {
       const response = await fetch("http://localhost:3001/api/vessel/all", {
@@ -244,8 +204,8 @@ export const Home = () => {
                         <Popup>
                           <h3>{alert.title}</h3>
                           <p>{alert.description}</p>
-                          <p><strong>Impact Radius: </strong>{impactRadius} km</p>
-                          <button className="viewPortBtn" onClick={() => handleNavigate(alert.info.articleTitle)}>
+                          <p><strong>Impact Radius: </strong>{impactRadius.toFixed(2)} km</p>
+                          <button className="viewPortBtn" onClick={() => handleNavigate(alert.title)}>
                             View ports affected
                           </button>
                         </Popup>
