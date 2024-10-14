@@ -1,38 +1,13 @@
 ### Description
 
-A simple portfolio template for developer/designers built with React. 
+A website aimed to increase the visibility and assist PSA with its port management capabilities built with React. 
 
-### [live preview](https://ubaimutl.github.io/react-portfolio/)
 
-[![react portfoiio](src/assets/images/react%20portfolio%20gif.gif)](https://ubaimutl.github.io/react-portfolio/)
-
+[![website demo](src/assets/images/website-demo.gif)]
 ### Features
 
-- Fully Responsive
-- Multi-Page Layout
-- Contact Form With EmailJs
-- React-Bootstrap
-- Edit Content From One Place
+- track ships current progress
+- track the crises that occur in the world
+- generate report based on port
+- real time event significance tracker
 
-### Setup
-
-Get the code
-
-<pre>git clone https://github.com/ubaimutl/react-portfolio.git</pre>
- 
-Install required dependencies
-
-<pre>yarn install</pre>
-
-
-Start the server
-
-<pre>yarn start</pre>
-
-### More
-
-Modify pages content in  `src/content_option.js`.
-
-### Thanks
-
-If you like this portfolio template don't forget give it a ⭐ 
