@@ -12,10 +12,18 @@ import shipIconUrl from '../../assets/images/cargo-ship_870107.png';
 import html2pdf from "html2pdf.js"; // Import html2pdf.js
 import html2canvas from "html2canvas"; // Import html2canvas
 
+
+
 export const ReportPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const shipName = queryParams.get("shipName");  // Get the shipName from query params
+  const oldETA = queryParams.get("oldETA");
+  alert(oldETA);
+  const newETA = queryParams.get("newETA");
+  const oldBerth = queryParams.get("oldBerth");
+  const newBerth = queryParams.get("newBerth");
+
 
   // Define ship icon for the marker
   delete L.Icon.Default.prototype._getIconUrl;
@@ -115,6 +123,11 @@ export const ReportPage = () => {
     }, 1000); // Wait 1 second to allow map to load
   };
 
+  const handleGenerateReport = () => {
+    const reportUrl = `/reportPage?shipName=${encodeURIComponent(shipName)}`;
+    window.open(reportUrl, "_blank");
+  };
+
   return (
     <HelmetProvider>
       <Container className="Reports-header" id="full-report"> {/* Added id to capture everything */}
@@ -166,10 +179,9 @@ export const ReportPage = () => {
                 ))}
               </MapContainer>
               <div className="reportDiv" id="report-content">
-                <p className="reportP">Original arrival time: 15:00</p>
-                <p className="reportP">Estimated new arrival time: 18:00</p>
-                <p>Fuel saved: 10%</p>
-                <p className="reportP">Reason for rerouting: Due to hurricanes within 10km of the area, new rerouting is needed to refrain from overcrowding of port A</p>
+                <p className="reportP" style={{marginBottom:5}}>Ship {shipName} was originally dued for Berth {oldBerth} at {oldETA} and is now bound for:</p>
+                <p className="reportP" style={{marginBottom:5}}>Berth {newBerth} at {newETA}.</p>
+                <p className="reportP" style={{marginBottom:5}}>Reason for rerouting: Due to hurricanes within 10km of the area, new rerouting is needed to refrain from overcrowding of port.</p>
               </div>
               <button onClick={downloadPDF}>
                 Download PDF

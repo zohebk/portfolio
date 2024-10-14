@@ -2,6 +2,38 @@
     margin-bottom: calc(3rem + 5.128vw)
 }
 
+.btnDiv {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+}
+
+.actBtnDiv {
+    display: flex;
+    align-items: center;
+}
+
+.removeBtn {
+    margin-left: 10;
+    background-color: #e40000;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 25px;
+    border: 0
+}
+
+.newsBtn:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+    transform: scale(1.05); /* Slight size increase */
+  }
+
+.clickBtn {
+    border-radius: 25px;
+    border: 0;
+    width: 40px;
+    height: 40px
+}
+
 .table td,
 .table th {
     color: var(--text-color);

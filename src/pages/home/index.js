@@ -36,6 +36,8 @@ export const Home = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [reload, setReload] = useState(0);
+  const [records, setRecords] = useState([]);
+  const [alert, setAlerts] = useState([]);
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:3002');
@@ -55,102 +57,54 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log("hi");
+    fetchVesselData();
   }, [reload]);
 
-  const aisData = [{
-    Route: [
-      {
-        latitude: 66.02695,
-        longitude: 12.253821666666665,
-      },
-      {
-        latitude: 67.0,
-        longitude: 13.0,
-      },
-      {
-        latitude: 68.0,
-        longitude: 14.0,
-      },
-      {
-        latitude: 69.0,
-        longitude: 15.0,
-      }
-    ],
-    "info": {
-      "MMSI": 259000420,
-      "ShipName": "AUGUSTSON",
+  // Fetching crisis-related news data
+  useEffect(() => {
+    fetchNewsData();
+  }, [reload]);
+
+  const fetchNewsData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/news");
+      const data = await response.json();
+      setAlerts(data);
+    } catch (err) {
+      alert(err);
     }
-  },
-  {
-    Route: [
-      {
-        latitude: 35.6895,
-        longitude: 139.6917, // Tokyo coordinates
-      },
-      {
-        latitude: 36.0,
-        longitude: 140.0,
-      },
-      {
-        latitude: 37.0,
-        longitude: 141.0,
-      },
-      {
-        latitude: 38.0,
-        longitude: 142.0,
-      }
-    ],
-    info: {
-      MMSI: 123456789,
-      ShipName: "SEASPRAY",
+  }
+
+  const fetchVesselData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/vessel/all", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setRecords(data);
+      console.log(records);
+    } catch (err) {
+      setRecords("ERROR");
+      alert(err);
     }
-  }]
-
-  const alertData = [
-    {
-      location: {
-        latitude: 37.7749,
-        longitude: -122.4194,
-      },
-      info: {
-        type: 'Earthquake',
-        description: 'Magnitude 5.6 earthquake',
-        impactRadius: 500,
-        articleTitle: "Magnitude 5.6 Earthquake Strikes San Francisco Bay Area",
-      },
-    },
-    {
-      location: {
-        latitude: 40.7128,
-        longitude: -74.0060,
-      },
-      info: {
-        type: 'Flood',
-        description: 'Severe flooding warning',
-        impactRadius: 200,
-        articleTitle: "Severe Flooding Warning Issued for New York City",
-
-      },
-    },
-    {
-      location: {
-        latitude: 35.6762,
-        longitude: 139.6503,
-      },
-      info: {
-        type: 'Tsunami',
-        description: 'Tsunami alert following earthquake',
-        impactRadius: 1000,
-        articleTitle: "Tsunami Alert Issued Following Earthquake Near Japan",
-      },
-    },
-  ];
-
+  }
 
   const handleNavigate = (articleTitle) => {
     navigate("/ports-affected", { state: { articleTitle } });
   };
+
+  const radius = (long1, long2, lat1, lat2) => {
+    const deltaLatitude = lat2 - lat1;
+    const deltaLongitude = long2 - long1;
+
+    // Calculate the hypotenuse length
+    const hypotenuse = Math.sqrt(deltaLatitude ** 2 + deltaLongitude ** 2)/2;
+    return hypotenuse;
+  }
+  
   return (
     <HelmetProvider>
       <section id="home" className="home">
@@ -163,7 +117,6 @@ export const Home = () => {
         <div>
           <div>
             <h2 className="mb-1x">Live AIS Vessel Data on Map</h2>
-            <text>{reload}</text>
 
             {loading ? (
               <p>Loading AIS data...</p>
@@ -179,12 +132,12 @@ export const Home = () => {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {aisData.map((vessel, index) => (
+                {records.map((vessel, index) => (
                   <React.Fragment key={index}>
                     <Marker
                       position={[
-                        vessel.Route[0].latitude,
-                        vessel.Route[0].longitude,
+                        vessel.routes[0].latitude,
+                        vessel.routes[0].longitude,
                       ]}
                       icon={shipIcon}
                     >
@@ -192,20 +145,20 @@ export const Home = () => {
                         <div>
                           <h3>{vessel.info.ShipName || "Unknown Vessel"}</h3>
                           <p><strong>MMSI:</strong> {vessel.info.MMSI}</p>
-                          <p><strong>Latitude:</strong> {vessel.Route[0].latitude}</p>
-                          <p><strong>Longitude:</strong> {vessel.Route[0].longitude}</p>
+                          <p><strong>Latitude:</strong> {vessel.routes[0].latitude}</p>
+                          <p><strong>Longitude:</strong> {vessel.routes[0].longitude}</p>
                         </div>
                       </Popup>
                     </Marker>
 
                     {/* Create the polyline for the projected route */}
                     <Polyline
-                      positions={vessel.Route.map(point => [point.latitude, point.longitude])}
+                      positions={vessel.routes.map(point => [point.latitude, point.longitude])}
                       color="grey" // You can customize the color here
                       weight={3} // Customize the weight of the polyline
                     />
 
-                    {vessel.Route.slice(1).map((point, pointIndex) => (
+                    {vessel.routes.slice(1).map((point, pointIndex) => (
                       <CircleMarker
                         key={`future-${index}-${pointIndex}`}
                         center={[point.latitude, point.longitude]}
@@ -217,25 +170,52 @@ export const Home = () => {
                 ))}
 
                 {/* Displaying disaster alerts */}
-                {alertData.map((alert, index) => (
-                  <Marker
-                    key={index}
-                    position={[alert.location.latitude, alert.location.longitude]}
-                    icon={new L.DivIcon({
-                      className: 'blinking-icon', // Applying the CSS class for the blinking effect
-                      iconSize: getIconSize(alert.info.impactRadius),
-                      iconAnchor: [getIconSize(alert.info.impactRadius)[0] / 2, getIconSize(alert.info.impactRadius)[1] / 2],
-                      popupAnchor: [0, -getIconSize(alert.info.impactRadius)[1] / 2],
-                    })}
-                  >
-                    <Popup>
-                      <h3>{alert.info.type}</h3>
-                      <p>{alert.info.description}</p>
-                      <p><strong>Impact Radius: </strong>{alert.info.impactRadius} km</p>
-                      <button className="viewPortBtn" onClick={() => handleNavigate(alert.info.articleTitle)}>View ports affected</button>
-                    </Popup>
-                  </Marker>
-                ))}
+                {alert.map((alert, index) => {
+                  const latitude1 = alert.latitude1;
+                  const latitude2 = alert.latitude2;
+                  const longitude1 = alert.longitude1;
+                  const longitude2 = alert.longitude2;
+
+                  // Check if the coordinates are valid numbers before proceeding
+                  if (
+                    typeof latitude1 === 'number' && 
+                    typeof latitude2 === 'number' &&
+                    typeof longitude1 === 'number' && 
+                    typeof longitude2 === 'number'
+                  ) {
+                    const midLatitude = (latitude1 + latitude2) / 2;
+                    const midLongitude = (longitude1 + longitude2) / 2;
+                    const impactRadius = radius(longitude1, longitude2, latitude1, latitude2);
+
+                    return (
+                      <Marker
+                        key={index}
+                        position={[midLatitude, midLongitude]}
+                        icon={new L.DivIcon({
+                          className: 'blinking-icon',
+                          iconSize: getIconSize(impactRadius),
+                          iconAnchor: [
+                            getIconSize(impactRadius)[0] / 2,
+                            getIconSize(impactRadius)[1] / 2,
+                          ],
+                          popupAnchor: [0, -getIconSize(impactRadius)[1] / 2],
+                        })}
+                      >
+                        <Popup>
+                          <h3>{alert.title}</h3>
+                          <p>{alert.description}</p>
+                          <p><strong>Impact Radius: </strong>{impactRadius.toFixed(2)} km</p>
+                          <button className="viewPortBtn" onClick={() => handleNavigate(alert.title)}>
+                            View ports affected
+                          </button>
+                        </Popup>
+                      </Marker>
+                    );
+                  } else {
+                    console.warn("Invalid coordinates for alert", alert);
+                    return null; // Skip rendering if coordinates are invalid
+                  }
+                })}
               </MapContainer>
             )}
           </div>
