@@ -1,12 +1,22 @@
-### Description
+# Description
 
-A simple portfolio template for developer/designers built with React. 
+A simple portfolio template for developer/designers built with React.
 
-### [live preview](https://ubaimutl.github.io/react-portfolio/)
+Live Preview: https://ubaimutl.github.io/react-portfolio/
 
-[![react portfoiio](src/assets/images/react%20portfolio%20gif.gif)](https://ubaimutl.github.io/react-portfolio/)
+# Clone the repository
+git clone https://github.com/ubaimutl/react-portfolio.git
 
-### Features
+# Navigate to the project directory
+cd react-portfolio
+
+# Install required dependencies
+yarn install
+
+# Start the server
+yarn start
+
+# Features
 
 - Fully Responsive
 - Multi-Page Layout
@@ -14,25 +24,27 @@ A simple portfolio template for developer/designers built with React.
 - React-Bootstrap
 - Edit Content From One Place
 
-### Setup
+# Troubleshooting
 
-Get the code
+If you face an issue where running `yarn start` results in:
+'react-scripts' is not recognized as an internal or external command, operable program or batch file.
 
-<pre>git clone https://github.com/ubaimutl/react-portfolio.git</pre>
- 
-Install required dependencies
+To fix this, follow these steps:
 
-<pre>yarn install</pre>
+1. Ensure all dependencies are installed
+   yarn install
 
+2. If the issue persists, clear Yarn's cache and reinstall the dependencies
+   yarn cache clean
+   yarn install
 
-Start the server
+3. If `react-scripts` is still missing, add it manually
+   yarn add react-scripts
 
-<pre>yarn start</pre>
+# More
 
-### More
+Modify pages content in 'src/content_option.js'
 
-Modify pages content in  `src/content_option.js`.
+# Thanks
 
-### Thanks
-
-If you like this portfolio template don't forget give it a ⭐ 
+If you like this portfolio template, don't forget to give it a ⭐.
