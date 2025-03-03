@@ -232,3 +232,32 @@ section {
 .intro_sec .h_bg-image {
     filter: saturate(0.5);
 }
+
+/* Rive Animation Container Styles */
+.h_bg-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .h_bg-image {
+    min-height: 600px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .h_bg-image {
+    min-height: 700px;
+  }
+}
+
+/* Make sure Rive canvas is responsive */
+canvas {
+  max-width: 100%;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+}
