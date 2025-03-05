@@ -56,10 +56,20 @@
   max-width: 500px;
   margin: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
   animation: float 6s ease-in-out infinite;
-  border-radius: 10px; /* Changed from 50% to 10px for a rectangular shape */
+  border-radius: 12px;
   z-index: 10;
+  transform: perspective(1000px) rotateY(0deg);
+  transition: transform 0.8s ease;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.image-wrapper:hover {
+  transform: perspective(1000px) rotateY(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
 /* Profile Image Animation */
@@ -67,18 +77,17 @@
   width: 100%;
   height: auto;
   display: block;
-  transition: transform 0.5s ease;
-  filter: blur(0px);
-  transition: filter 0.3s ease, transform 0.5s ease;
+  transition: transform 0.5s ease, filter 0.5s ease;
+  filter: contrast(1.05) saturate(1.1);
 }
 
 .profile-image.animated {
-  animation: pulse 2s infinite alternate;
+  animation: subtle-glow 3s infinite alternate;
 }
 
 .image-wrapper:hover .profile-image {
-  transform: scale(1.05);
-  filter: blur(0px); /* Remove blur on hover */
+  transform: scale(1.03);
+  filter: contrast(1.1) saturate(1.2);
 }
 
 /* Overlay Effect */
@@ -88,10 +97,30 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(128, 0, 128, 0.2) 100%);
-  opacity: 0.7;
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.15) 0%, rgba(128, 0, 128, 0.15) 100%);
+  opacity: 0.8;
   animation: colorShift 8s infinite alternate;
-  backdrop-filter: blur(3px); /* Add blur effect to the overlay */
+  pointer-events: none;
+}
+
+/* Add a glowing border effect */
+.image-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ccff, #0e1538, #0e1538, #d400d4);
+  z-index: -1;
+  animation: animate-border 10s linear infinite;
+  border-radius: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-wrapper:hover::before {
+  opacity: 1;
 }
 
 /* Loading Animation */
@@ -119,37 +148,46 @@
 /* Keyframe Animations */
 @keyframes float {
   0% {
-    transform: translateY(0px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transform: perspective(1000px) rotateY(0deg) translateY(0px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
   }
   50% {
-    transform: translateY(-15px);
-    box-shadow: 0 25px 30px rgba(0, 0, 0, 0.2);
+    transform: perspective(1000px) rotateY(3deg) translateY(-15px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
   }
   100% {
-    transform: translateY(0px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transform: perspective(1000px) rotateY(0deg) translateY(0px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
   }
 }
 
-@keyframes pulse {
+@keyframes subtle-glow {
   0% {
-    filter: brightness(1) blur(2px);
+    filter: contrast(1.05) saturate(1.1) brightness(1);
   }
   100% {
-    filter: brightness(1.1) blur(1px);
+    filter: contrast(1.1) saturate(1.2) brightness(1.1);
   }
 }
 
 @keyframes colorShift {
   0% {
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(128, 0, 128, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.15) 0%, rgba(128, 0, 128, 0.15) 100%);
   }
   50% {
-    background: linear-gradient(135deg, rgba(128, 0, 128, 0.2) 0%, rgba(0, 123, 255, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(128, 0, 128, 0.15) 0%, rgba(0, 123, 255, 0.15) 100%);
   }
   100% {
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(128, 0, 128, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.15) 0%, rgba(128, 0, 128, 0.15) 100%);
+  }
+}
+
+@keyframes animate-border {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
