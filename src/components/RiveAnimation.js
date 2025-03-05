@@ -7,25 +7,18 @@ const RiveAnimation = () => {
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   
-  // Check if device is mobile
+  // Check if device is mobile - simpler approach
   useEffect(() => {
     const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-      const isMobileDevice = mobileRegex.test(userAgent.toLowerCase());
-      setIsMobile(isMobileDevice || window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 768);
     };
     
     // Check on initial load
     checkMobile();
     
     // Check on resize
-    const handleResize = () => {
-      checkMobile();
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
   
   // Configure Rive with better layout settings for high resolution
@@ -33,10 +26,9 @@ const RiveAnimation = () => {
     src: process.env.PUBLIC_URL + '/ZohebAi.riv',
     autoplay: true,
     layout: new Layout({
-      fit: isMobile ? Fit.Cover : Fit.Contain, // Use Cover for mobile to ensure it fills the space
+      fit: Fit.Contain, // Use Contain for all devices for consistency
       alignment: Alignment.Center,
-      // Adjust scale based on device
-      scale: isMobile ? 1.0 : 1.2
+      scale: 1.0 // Use a consistent scale
     }),
     // Enable touch interactions for mobile
     isTouchScrollEnabled: true,
@@ -50,25 +42,6 @@ const RiveAnimation = () => {
       setIsLoading(false);
     }
   });
-
-  // Apply canvas size adjustments when the component mounts or when rive instance changes
-  useEffect(() => {
-    if (rive && containerRef.current) {
-      // Force a resize event to ensure the canvas is properly sized
-      window.dispatchEvent(new Event('resize'));
-      
-      // For mobile devices, ensure the canvas is properly sized
-      if (isMobile) {
-        const canvas = containerRef.current.querySelector('canvas');
-        if (canvas) {
-          canvas.style.width = '100%';
-          canvas.style.height = '100%';
-          // Force the canvas to redraw
-          rive.layout && rive.layout.updateLayout();
-        }
-      }
-    }
-  }, [rive, isMobile]);
 
   // Fallback image if Rive fails
   const renderFallbackContent = () => {
@@ -109,8 +82,10 @@ const RiveAnimation = () => {
         overflow: 'hidden',
         borderRadius: '8px',
         position: 'relative',
-        // Add touch-action for better mobile interaction
-        touchAction: 'none'
+        // Mobile-specific styles
+        ...(isMobile ? {
+          maxHeight: '50vh', // Limit height on mobile
+        } : {})
       }}
     >
       {isLoading && (
