@@ -1,40 +1,30 @@
-import { useState, useEffect, useRef } from 'react';
-import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
+import { useState, useEffect } from 'react';
+import { useRive } from '@rive-app/react-canvas';
 
 const RiveAnimation = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const containerRef = useRef(null);
   
-  // Check if device is mobile - simpler approach
+  // Simple mobile detection
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
     
-    // Check on initial load
     checkMobile();
-    
-    // Check on resize
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  
-  // Configure Rive with better layout settings for high resolution
-  const { rive, RiveComponent } = useRive({
+
+  // Use a very simple Rive configuration
+  const { RiveComponent } = useRive({
     src: process.env.PUBLIC_URL + '/ZohebAi.riv',
+    stateMachines: "State Machine 1", // Try using a state machine if available
     autoplay: true,
-    layout: new Layout({
-      fit: Fit.Contain, // Use Contain for all devices for consistency
-      alignment: Alignment.Center,
-      scale: 1.0 // Use a consistent scale
-    }),
-    // Enable touch interactions for mobile
-    isTouchScrollEnabled: true,
     onLoadError: (e) => {
       console.error("Rive file load error:", e);
-      setError("The Rive file appears to be corrupted or in an invalid format.");
+      setError("The animation couldn't be loaded on this device.");
       setIsLoading(false);
     },
     onLoad: () => {
@@ -43,7 +33,7 @@ const RiveAnimation = () => {
     }
   });
 
-  // Fallback image if Rive fails
+  // Fallback content for mobile or when Rive fails
   const renderFallbackContent = () => {
     return (
       <div style={{ 
@@ -60,34 +50,32 @@ const RiveAnimation = () => {
         borderRadius: '8px'
       }}>
         <div>
-          <h3>Animation Error</h3>
-          <p>{error}</p>
+          <h3>Animation Not Available</h3>
+          <p>{error || "The animation is not available on mobile devices."}</p>
           <p style={{fontSize: '14px', marginTop: '10px'}}>
-            Try downloading a valid Rive file (.riv) from the <a href="https://rive.app/community/" target="_blank" rel="noopener noreferrer">Rive Community</a>
+            Please view on a desktop browser for the full experience.
           </p>
         </div>
       </div>
     );
   };
 
+  // For mobile devices, just show the fallback content
+  if (isMobile) {
+    return renderFallbackContent();
+  }
+
   return (
-    <div 
-      ref={containerRef}
-      style={{ 
-        width: '100%', 
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden',
-        borderRadius: '8px',
-        position: 'relative',
-        // Mobile-specific styles
-        ...(isMobile ? {
-          maxHeight: '50vh', // Limit height on mobile
-        } : {})
-      }}
-    >
+    <div style={{ 
+      width: '100%', 
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'hidden',
+      borderRadius: '8px',
+      position: 'relative'
+    }}>
       {isLoading && (
         <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
           Loading...
