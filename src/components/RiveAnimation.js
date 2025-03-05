@@ -7,7 +7,7 @@ const RiveAnimation = () => {
   
   // Configure Rive with better layout settings for high resolution
   const { rive, RiveComponent } = useRive({
-    src: process.env.PUBLIC_URL + '/ZohebAI.riv',
+    src: process.env.PUBLIC_URL + '/ZohebAi.riv',
     autoplay: true,
     layout: new Layout({
       fit: Fit.Contain, // Use Contain to maintain aspect ratio without cropping
