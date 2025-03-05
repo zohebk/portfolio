@@ -1,12 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
+import './RiveAnimation.css'; // We'll create this CSS file next
 
 // Create a wrapper component to handle the Rive animation
-// This follows the recommended pattern from Rive docs for conditional rendering
 const RiveAnimation = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
+  
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+      const isMobileDevice = mobileRegex.test(userAgent.toLowerCase());
+      setIsMobile(isMobileDevice || window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Configure Rive with recommended settings from the documentation
   const { rive, RiveComponent } = useRive({
@@ -21,7 +36,7 @@ const RiveAnimation = () => {
     shouldDisableRiveListeners: false,
     onLoadError: (e) => {
       console.error("Rive file load error:", e);
-      setError("The animation couldn't be loaded. Please try again later.");
+      setError("The animation couldn't be loaded. Using image fallback.");
       setIsLoading(false);
     },
     onLoad: () => {
@@ -32,11 +47,27 @@ const RiveAnimation = () => {
 
   // Ensure proper sizing of the container
   useEffect(() => {
-    if (containerRef.current && !isLoading && !error) {
+    if (containerRef.current && !isLoading && !error && !isMobile) {
       // Force a resize event to ensure the canvas is properly sized
       window.dispatchEvent(new Event('resize'));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error, isMobile]);
+
+  // Render the image with animations for mobile
+  const renderMobileImage = () => {
+    return (
+      <div className="mobile-image-container">
+        <div className="image-wrapper">
+          <img 
+            src={process.env.PUBLIC_URL + '/zoheb.jpg'} 
+            alt="Zoheb" 
+            className="profile-image animated"
+          />
+          <div className="overlay-effect"></div>
+        </div>
+      </div>
+    );
+  };
 
   // Fallback content if Rive fails to load
   const renderFallbackContent = () => {
@@ -54,16 +85,24 @@ const RiveAnimation = () => {
         padding: '20px',
         borderRadius: '8px'
       }}>
-        <div>
-          <h3>Animation Error</h3>
-          <p>{error}</p>
-          <p style={{fontSize: '14px', marginTop: '10px'}}>
-            Please try refreshing the page or view on a different browser.
-          </p>
+        <div className="mobile-image-container">
+          <div className="image-wrapper">
+            <img 
+              src={process.env.PUBLIC_URL + '/zoheb.jpg'} 
+              alt="Zoheb" 
+              className="profile-image animated"
+            />
+            <div className="overlay-effect"></div>
+          </div>
         </div>
       </div>
     );
   };
+
+  // For mobile devices, show the image with animations
+  if (isMobile) {
+    return renderMobileImage();
+  }
 
   return (
     <div 
@@ -80,8 +119,9 @@ const RiveAnimation = () => {
       }}
     >
       {isLoading && (
-        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-          Loading...
+        <div className="loading-animation">
+          <div className="spinner"></div>
+          <p>Loading...</p>
         </div>
       )}
       
