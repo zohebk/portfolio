@@ -14,7 +14,7 @@ const introdata = {
   },
   description:
     "Expert in developing pricing strategies, program governance, and team leadership across diverse sectors. Passionate about automating business processes and delivering custom solutions.",
-  your_img_url: "./ZohebAI.riv",
+  your_img_url: "./ZohebAi.riv",
 };
 
 const dataabout = {
