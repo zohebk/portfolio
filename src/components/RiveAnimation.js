@@ -1,30 +1,27 @@
-import { useState, useEffect } from 'react';
-import { useRive } from '@rive-app/react-canvas';
+import { useState, useEffect, useRef } from 'react';
+import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
 
+// Create a wrapper component to handle the Rive animation
+// This follows the recommended pattern from Rive docs for conditional rendering
 const RiveAnimation = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef(null);
   
-  // Simple mobile detection
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Use a very simple Rive configuration
-  const { RiveComponent } = useRive({
+  // Configure Rive with recommended settings from the documentation
+  const { rive, RiveComponent } = useRive({
     src: process.env.PUBLIC_URL + '/ZohebAi.riv',
-    stateMachines: "State Machine 1", // Try using a state machine if available
     autoplay: true,
+    // Use Layout for proper sizing and positioning
+    layout: new Layout({
+      fit: Fit.Contain,
+      alignment: Alignment.Center,
+    }),
+    // Enable touch interactions for mobile
+    shouldDisableRiveListeners: false,
     onLoadError: (e) => {
       console.error("Rive file load error:", e);
-      setError("The animation couldn't be loaded on this device.");
+      setError("The animation couldn't be loaded. Please try again later.");
       setIsLoading(false);
     },
     onLoad: () => {
@@ -33,7 +30,15 @@ const RiveAnimation = () => {
     }
   });
 
-  // Fallback content for mobile or when Rive fails
+  // Ensure proper sizing of the container
+  useEffect(() => {
+    if (containerRef.current && !isLoading && !error) {
+      // Force a resize event to ensure the canvas is properly sized
+      window.dispatchEvent(new Event('resize'));
+    }
+  }, [isLoading, error]);
+
+  // Fallback content if Rive fails to load
   const renderFallbackContent = () => {
     return (
       <div style={{ 
@@ -50,32 +55,30 @@ const RiveAnimation = () => {
         borderRadius: '8px'
       }}>
         <div>
-          <h3>Animation Not Available</h3>
-          <p>{error || "The animation is not available on mobile devices."}</p>
+          <h3>Animation Error</h3>
+          <p>{error}</p>
           <p style={{fontSize: '14px', marginTop: '10px'}}>
-            Please view on a desktop browser for the full experience.
+            Please try refreshing the page or view on a different browser.
           </p>
         </div>
       </div>
     );
   };
 
-  // For mobile devices, just show the fallback content
-  if (isMobile) {
-    return renderFallbackContent();
-  }
-
   return (
-    <div style={{ 
-      width: '100%', 
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      overflow: 'hidden',
-      borderRadius: '8px',
-      position: 'relative'
-    }}>
+    <div 
+      ref={containerRef}
+      style={{ 
+        width: '100%', 
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        borderRadius: '8px',
+        position: 'relative'
+      }}
+    >
       {isLoading && (
         <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
           Loading...
