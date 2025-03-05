@@ -79,8 +79,8 @@ const RiveAnimation = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f8f9fa',
-        color: '#333',
+        backgroundColor: '#1B2735',
+        color: '#FFF',
         textAlign: 'center',
         padding: '20px',
         borderRadius: '8px'
