@@ -6,7 +6,7 @@ const meta = {
 };
 
 const introdata = {
-  title: "I'm an AI Builder and bring my own agents to work. ",
+  title: "I'm a Builder and bring my own agents to work. ",
   animated: {
     first: "I'm a Group Program Manager ",
     second: "I'm well versed in technical program management and proficient in working with technical teams",
@@ -100,7 +100,7 @@ const contactConfig = {
   description:
     "Feel free to reach out for collaboration or to learn more about my experience in AI, program management, and application development.",
   YOUR_SERVICE_ID: "service_9ct2plv",
-  YOUR_TEMPLATE_ID: "template_hnjopne",
+  YOUR_TEMPLATE_ID: "template_p70oczl",
   YOUR_USER_ID: "4iLaQgOh_pCiwcpDT",
 };
 
