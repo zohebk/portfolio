@@ -1,14 +1,15 @@
 /* Starry Background Effect */
 .mobile-image-container {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   position: relative;
   background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-  min-height: 100vh;
+  min-height: 70vh;
+  padding-bottom: 20px;
 }
 
 /* Stars - Small */
@@ -54,7 +55,8 @@
   position: relative;
   width: 90%;
   max-width: 500px;
-  margin: 20px;
+  margin: 0;
+  margin-bottom: 20px;
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
   animation: float 6s ease-in-out infinite;
@@ -212,11 +214,19 @@
     width: 85%;
     max-width: 450px;
   }
+  
+  .mobile-image-container {
+    min-height: 60vh;
+  }
 }
 
 @media (max-width: 480px) {
   .image-wrapper {
     width: 90%;
     max-width: 400px;
+  }
+  
+  .mobile-image-container {
+    min-height: 50vh;
   }
 } 
