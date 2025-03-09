@@ -96,12 +96,12 @@ const dataportfolio = [
 
 const contactConfig = {
   YOUR_EMAIL: "zoheb.kerawalla@gmail.com",
-  YOUR_FONE: "+1(925)298-2486",
+  YOUR_FONE: "+1 925-298-2486",
   description:
     "Feel free to reach out for collaboration or to learn more about my experience in AI, program management, and application development.",
   YOUR_SERVICE_ID: "service_9ct2plv",
   YOUR_TEMPLATE_ID: "template_123", 
-  YOUR_USER_ID: "4iLaQgOh_pCiwcpDT",
+  YOUR_USER_ID: "4iLaQgOh_pCiwcpDT" ,
 };
 
 const socialprofils = {
